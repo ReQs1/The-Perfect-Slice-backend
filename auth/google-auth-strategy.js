@@ -20,8 +20,8 @@ passport.use(
         let user;
 
         const existingUser = await sql(
-          "SELECT * FROM users WHERE google_id = $1 OR email = $2",
-          [googleId, email]
+          "SELECT * FROM users WHERE google_id = $1",
+          [googleId]
         );
 
         if (existingUser.length === 0) {
