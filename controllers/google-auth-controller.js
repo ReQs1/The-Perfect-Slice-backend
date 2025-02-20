@@ -17,7 +17,7 @@ module.exports.userInfoController = async (req, res) => {
       return res.status(404).json({ error: "User not found" });
     }
 
-    res.json(user.at(0));
+    res.json({ data: user.at(0) });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
