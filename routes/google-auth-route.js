@@ -1,12 +1,14 @@
 const express = require("express");
 const router = express.Router();
 require("dotenv").config();
+
 const passport = require("passport");
+
 const { isAuthenticated } = require("../middleware/isAuthenticated");
 const {
   refreshTokenController,
   userInfoController,
-} = require("../controllers/auth-controller");
+} = require("../controllers/google-auth-controller");
 
 const CLIENT_URL = process.env.CLIENT_URL;
 

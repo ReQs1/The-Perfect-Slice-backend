@@ -1,6 +1,7 @@
 const { sql } = require("../db/db");
-const ExpressError = require("../utils/ExpressError");
 const jwt = require("jsonwebtoken");
+
+const ExpressError = require("../utils/ExpressError");
 
 module.exports.userInfoController = async (req, res) => {
   try {
