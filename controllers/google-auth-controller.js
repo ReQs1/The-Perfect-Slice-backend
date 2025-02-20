@@ -2,20 +2,24 @@ const { sql } = require("../db/db");
 const jwt = require("jsonwebtoken");
 
 const ExpressError = require("../utils/ExpressError");
+const { verifyJwtToken } = require("../utils/verify-jwt-token");
 
 module.exports.userInfoController = async (req, res) => {
   try {
+    const { userId } = req.user;
+
     const user = await sql(
       "SELECT id, name, email, picture, is_admin FROM users WHERE id = $1",
-      [req.user.userId]
+      [userId]
     );
-    res.json(user[0]);
-  } catch (error) {
-    if (error.statusCode) {
-      res.status(error.statusCode).json({ error: error.message });
-    } else {
-      res.status(500).json({ error: "Internal server error" });
+
+    if (!user.length) {
+      return res.status(404).json({ error: "User not found" });
     }
+
+    res.json(user.at(0));
+  } catch (error) {
+    res.status(500).json({ error: error.message });
   }
 };
 
@@ -27,17 +31,18 @@ module.exports.refreshTokenController = async (req, res) => {
       throw new ExpressError("No refresh token provided", 401);
     }
 
-    const decoded = jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET);
-    const user = await sql("SELECT * FROM users WHERE id = $1", [
-      decoded.userId,
-    ]);
+    const userId = verifyJwtToken("refresh_token", refreshToken);
 
-    if (!user.length) {
-      throw new ExpressError("User not found", 401);
+    const userQuery = await sql("SELECT * FROM users WHERE id = $1", [userId]);
+
+    if (!userQuery.length) {
+      throw new ExpressError("User not found", 404);
     }
 
+    const user = userQuery.at(0);
+
     const newAccessToken = jwt.sign(
-      { userId: user[0].id, isAdmin: user[0].is_admin },
+      { userId: user.id, isAdmin: user.is_admin },
       process.env.JWT_SECRET,
       { expiresIn: "1h" }
     );
