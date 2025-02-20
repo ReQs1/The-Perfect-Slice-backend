@@ -5,9 +5,10 @@ const ExpressError = require("../utils/ExpressError");
 
 module.exports.userInfoController = async (req, res) => {
   try {
-    const user = await sql("SELECT * FROM users WHERE id = $1", [
-      req.user.userId,
-    ]);
+    const user = await sql(
+      "SELECT id, name, email, picture FROM users WHERE id = $1",
+      [req.user.userId]
+    );
     res.json(user[0]);
   } catch (error) {
     if (error.statusCode) {
