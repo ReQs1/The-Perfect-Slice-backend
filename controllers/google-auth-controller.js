@@ -6,7 +6,7 @@ const ExpressError = require("../utils/ExpressError");
 module.exports.userInfoController = async (req, res) => {
   try {
     const user = await sql(
-      "SELECT id, name, email, picture FROM users WHERE id = $1",
+      "SELECT id, name, email, picture, is_admin FROM users WHERE id = $1",
       [req.user.userId]
     );
     res.json(user[0]);
@@ -37,7 +37,7 @@ module.exports.refreshTokenController = async (req, res) => {
     }
 
     const newAccessToken = jwt.sign(
-      { userId: user[0].id },
+      { userId: user[0].id, isAdmin: user[0].is_admin },
       process.env.JWT_SECRET,
       { expiresIn: "1h" }
     );

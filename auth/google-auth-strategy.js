@@ -38,6 +38,7 @@ passport.use(
         const accessToken = jwt.sign(
           {
             userId: user.id,
+            isAdmin: user.is_admin,
           },
 
           process.env.JWT_SECRET,
