@@ -4,9 +4,9 @@ const jwt = require("jsonwebtoken");
 module.exports.verifyJwtToken = (type, token) => {
   if (type === "access_token") {
     try {
-      const { userId, isAdmin } = jwt.verify(token, process.env.JWT_SECRET);
+      const decodedInfo = jwt.verify(token, process.env.JWT_SECRET);
 
-      return { userId, isAdmin };
+      return decodedInfo;
     } catch (e) {
       throw new ExpressError(e.message, 401);
     }
