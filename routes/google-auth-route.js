@@ -7,6 +7,7 @@ const { isAuthenticated } = require("../middleware/isAuthenticated");
 const {
   refreshTokenController,
   userInfoController,
+  logoutController,
 } = require("../controllers/google-auth-controller");
 
 const CLIENT_URL = process.env.CLIENT_URL;
@@ -48,5 +49,7 @@ router.get(
 router.get("/user", isAuthenticated, userInfoController);
 
 router.post("/refresh-token", refreshTokenController);
+
+router.post("/logout", logoutController);
 
 module.exports = router;

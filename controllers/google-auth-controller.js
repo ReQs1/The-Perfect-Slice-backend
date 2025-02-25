@@ -17,7 +17,7 @@ module.exports.userInfoController = async (req, res) => {
       return res.status(404).json({ error: "User not found" });
     }
 
-    res.json({ data: user.at(0) });
+    res.json({ user: user.at(0) });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -62,4 +62,10 @@ module.exports.refreshTokenController = async (req, res) => {
       res.status(500).json({ error: "Internal server error" });
     }
   }
+};
+
+module.exports.logoutController = (req, res) => {
+  res.clearCookie("access_token");
+  res.clearCookie("refresh_token");
+  res.redirect(process.env.CLIENT_URL);
 };
