@@ -67,5 +67,5 @@ module.exports.refreshTokenController = async (req, res) => {
 module.exports.logoutController = (req, res) => {
   res.clearCookie("access_token");
   res.clearCookie("refresh_token");
-  res.redirect(process.env.CLIENT_URL);
+  res.status(200).json({ message: "Logged out successfully" });
 };
