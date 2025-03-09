@@ -5,7 +5,7 @@ module.exports.getComments = async (req, res) => {
   try {
     const { postId } = req.params;
     const commentsQuery = await sql(
-      `SELECT c.id, c.body, c.created_at, u.name as author_name, u.picture as author_picture 
+      `SELECT c.id, c.body, c.created_at, u.name as author_name, u.picture as author_picture, u.id as author_id
          FROM comments c
          JOIN users u ON c.user_id = u.id
          WHERE c.post_id = $1
