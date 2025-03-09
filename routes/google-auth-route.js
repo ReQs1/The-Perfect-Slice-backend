@@ -31,19 +31,24 @@ router.get(
     res.cookie("access_token", req.user.accessToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
+      sameSite: "none",
       maxAge: 60 * 60 * 1000, // 1 hour
+      domain: process.env.CLIENT_URL,
     });
 
     // Set refresh token cookie
     res.cookie("refresh_token", req.user.refreshToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
+      sameSite: "none",
       maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
+      domain: process.env.CLIENT_URL,
     });
     const redirectTo = decodeURIComponent(req.query.state || "/");
-    res.redirect(`${CLIENT_URL}/${redirectTo}`);
+    const cleanRedirectPath = redirectTo.startsWith("/")
+      ? redirectTo.slice(1)
+      : redirectTo;
+    res.redirect(`${CLIENT_URL}/${cleanRedirectPath}`);
   }
 );
 
