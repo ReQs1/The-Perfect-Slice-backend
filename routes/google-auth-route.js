@@ -28,22 +28,28 @@ router.get(
     session: false,
   }),
   (req, res) => {
+    // Extract domain from CLIENT_URL
+    const domain =
+      process.env.NODE_ENV === "production"
+        ? "perfectslice.netlify.app" // Your Netlify domain without https://
+        : "localhost";
+
     res.cookie("access_token", req.user.accessToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "none",
       maxAge: 60 * 60 * 1000, // 1 hour
-      domain: process.env.CLIENT_URL,
+      domain: domain,
     });
 
-    // Set refresh token cookie
     res.cookie("refresh_token", req.user.refreshToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "none",
       maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
-      domain: process.env.CLIENT_URL,
+      domain: domain,
     });
+
     const redirectTo = req.query.state
       ? decodeURIComponent(req.query.state)
       : "/";
