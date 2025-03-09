@@ -6,12 +6,6 @@ exports.addLike = async (req, res) => {
     const { postId } = req.params;
     const { userId } = req.user;
 
-    const postQuery = await sql(`SELECT * FROM posts WHERE id = $1`, [postId]);
-
-    if (postQuery.length === 0) {
-      return res.status(404).json({ error: "Post not found" });
-    }
-
     const existingLike = await sql(
       `SELECT * FROM likes WHERE post_id = $1 AND user_id = $2`,
       [postId, userId]
@@ -48,12 +42,6 @@ exports.deleteLike = async (req, res) => {
   try {
     const { postId } = req.params;
     const { userId } = req.user;
-
-    const postQuery = await sql(`SELECT * FROM posts WHERE id = $1`, [postId]);
-
-    if (postQuery.length === 0) {
-      return res.status(404).json({ error: "Post not found" });
-    }
 
     const existingLike = await sql(
       `SELECT * FROM likes WHERE post_id = $1 AND user_id = $2`,
@@ -93,11 +81,7 @@ exports.getUserLikes = async (req, res) => {
     const { userId } = req.user;
 
     const likedPostsQuery = await sql(
-      `SELECT p.id, p.title
-         FROM likes l
-         JOIN posts p ON l.post_id = p.id
-         WHERE l.user_id = $1
-         ORDER BY l.created_at DESC`,
+      `SELECT post_id FROM likes WHERE user_id = $1`,
       [userId]
     );
 
@@ -110,12 +94,6 @@ exports.getUserLikes = async (req, res) => {
 exports.getLikesCount = async (req, res) => {
   try {
     const { postId } = req.params;
-
-    const postQuery = await sql(`SELECT * FROM posts WHERE id = $1`, [postId]);
-
-    if (postQuery.length === 0) {
-      return res.status(404).json({ error: "Post not found" });
-    }
 
     const likeCountQuery = await sql(
       `SELECT COUNT(*) AS like_count FROM likes WHERE post_id = $1`,

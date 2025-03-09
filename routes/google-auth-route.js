@@ -12,13 +12,14 @@ const {
 
 const CLIENT_URL = process.env.CLIENT_URL;
 
-router.get(
-  "/google",
+router.get("/google", (req, res, next) => {
+  const state = encodeURIComponent(req.query.redirect || "/");
   passport.authenticate("google", {
     scope: ["email", "profile"],
     session: false,
-  })
-);
+    state,
+  })(req, res, next);
+});
 
 router.get(
   "/google/callback",
@@ -41,8 +42,8 @@ router.get(
       sameSite: "lax",
       maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
     });
-
-    res.redirect(CLIENT_URL);
+    const redirectTo = decodeURIComponent(req.query.state || "/");
+    res.redirect(`${CLIENT_URL}/${redirectTo}`);
   }
 );
 

@@ -21,7 +21,7 @@ app.use(cookieParser());
 
 app.use("/auth", googleAuthRoute);
 app.use("/api", commentsRoute);
-app.use("api", likesRoute);
+app.use("/api", likesRoute);
 
 const PORT = 5000;
 app.listen(PORT, () => {

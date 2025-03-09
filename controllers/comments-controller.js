@@ -152,12 +152,6 @@ exports.getCommentsCount = async (req, res) => {
   try {
     const { postId } = req.params;
 
-    const postQuery = await sql(`SELECT * FROM posts WHERE id = $1`, [postId]);
-
-    if (postQuery.length === 0) {
-      return res.status(404).json({ error: "Post not found" });
-    }
-
     const commentCountQuery = await sql(
       `SELECT COUNT(*) AS comment_count FROM comments WHERE post_id = $1`,
       [postId]
