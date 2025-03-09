@@ -44,11 +44,10 @@ router.get(
       maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
       domain: process.env.CLIENT_URL,
     });
-    const redirectTo = decodeURIComponent(req.query.state || "/");
-    const cleanRedirectPath = redirectTo.startsWith("/")
-      ? redirectTo.slice(1)
-      : redirectTo;
-    res.redirect(`${CLIENT_URL}/${cleanRedirectPath}`);
+    const redirectTo = req.query.state
+      ? decodeURIComponent(req.query.state)
+      : "/";
+    res.redirect(`${CLIENT_URL}${redirectTo}`);
   }
 );
 
