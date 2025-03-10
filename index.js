@@ -46,10 +46,6 @@ app.use("/auth", googleAuthRoute);
 app.use("/api", commentsRoute);
 app.use("/api", likesRoute);
 
-app.get("/health", (req, res) => {
-  res.status(200).json({ status: "ok" });
-});
-
 const PORT = 5000;
 app.listen(PORT, () => {
   console.log(`App listening on port ${PORT}`);
