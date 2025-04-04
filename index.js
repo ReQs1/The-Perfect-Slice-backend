@@ -17,7 +17,7 @@ const globalLimiter = rateLimit({
   max: 200,
   standardHeaders: true,
   legacyHeaders: false,
-  validate: { trustProxy: false },
+  validate: { xForwardedForHeader: false },
   message: "Too many requests from this IP, please try again later",
 });
 
@@ -26,7 +26,7 @@ const authLimiter = rateLimit({
   max: 50,
   standardHeaders: true,
   legacyHeaders: false,
-  validate: { trustProxy: false },
+  validate: { xForwardedForHeader: false },
   message: "Too many authentication attempts, please try again later",
 });
 
