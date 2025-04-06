@@ -51,6 +51,11 @@ module.exports.refreshTokenController = async (req, res) => {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+      path: "/",
+      domain:
+        process.env.NODE_ENV === "production"
+          ? "the-perfect-slice-backend.onrender.com"
+          : "localhost",
       maxAge: 60 * 60 * 1000, // 1 hour
     });
 
@@ -69,11 +74,21 @@ module.exports.logoutController = (req, res) => {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+    path: "/",
+    domain:
+      process.env.NODE_ENV === "production"
+        ? "the-perfect-slice-backend.onrender.com"
+        : "localhost",
   });
   res.clearCookie("refresh_token", {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+    path: "/",
+    domain:
+      process.env.NODE_ENV === "production"
+        ? "the-perfect-slice-backend.onrender.com"
+        : "localhost",
   });
   res.status(200).json({ message: "Logged out successfully" });
 };
